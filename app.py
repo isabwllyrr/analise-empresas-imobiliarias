@@ -21,11 +21,13 @@ dados_energia = {
     'Empresa': ['CTEEP', 'TAESA', 'COPEL', 'ENGIE', 'CEMIG'],
     'Liquidez Corrente': [2.63, 2.1, 1.34, 1.23, 0.99],
     'Grau de Endividamento': [51.45, 64.97, 56.49, 76.71, 56.24],
+    'Composição do Endividamento': [11.92, 13.84, 29.02, 19.29, 40.67 ],
     'Margem Líquida': [44.63, 47.22, 9.48, 30.80, 15.14],
     'ROE': [15.15, 22.66, 10.92, 33.85, 22.73],
     'P/L': [6.43, 7.46, 12.86, 9.0, 4.16],
     'P/VPA': [0.89, 1.68, 1.04, 3.04, 0.96],
-    'Dividend Yield': [7.50, 11.62, 6.90, 8.16, 14.53]
+    'Dividend Yield': [7.50, 11.62, 6.90, 8.16, 14.53],
+    'EBITDA': [64.42, 80.64, 22.32, 67.61, 23.56]
 }
 
 # === Normalização ===
