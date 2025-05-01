@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # === Dados médios dos indicadores (2022-2024) ===
-dados = {
+dados_imobiliario = {
     'Empresa': ['ALIANS', 'CCR', 'CYRELA', 'EZTEC', 'IGUATEMI', 'MULTIPLAN'],
     'Liquidez Corrente': [2.30, 1.39, 2.86, 6.00, 1.85, 1.41],
     'Grau de Endividamento': [43.16, 76.33, 52.58, 20.81, 47.38, 44.76],
@@ -15,44 +15,64 @@ dados = {
     'P/VPA': [0.71, 11.47, 0.80, 0.63, 1.53, 2.09],
     'Dividend Yield': [5.39, 3.08, 5.35, 4.91, 2.18, 3.91]
 }
-
-df = pd.DataFrame(dados)
-
-# Normalização
-maior_melhor = ['Liquidez Corrente', 'Margem Líquida', 'ROE', 'Dividend Yield']
-menor_melhor = ['Grau de Endividamento', 'P/L', 'P/VPA']
-
-for col in maior_melhor:
-    df[col + '_norm'] = (df[col] - df[col].min()) / (df[col].max() - df[col].min())
-
-for col in menor_melhor:
-    df[col + '_norm'] = 1 - (df[col] - df[col].min()) / (df[col].max() - df[col].min())
-
-# Pesos
-pesos = {
-    'Liquidez Corrente_norm': 0.10,
-    'Grau de Endividamento_norm': 0.15,
-    'Margem Líquida_norm': 0.15,
-    'ROE_norm': 0.15,
-    'P/L_norm': 0.15,
-    'P/VPA_norm': 0.10,
-    'Dividend Yield_norm': 0.10
+dados_energia = {
+    'Empresa': ['CTEEP', 'TAESA','COPEL','ENGIE', 'CEMIG'],
+    'Liquidez Corrente': [2.63,2.1,1.34,1.23,0.99],
+    'Grau de Endividamento': [51.45,64.97,56.49,76.71,56.24],
+    'Margem Líquida': [44.63,47.22,9.48,30.80,15.14],
+    'ROE': [15.15,22.66,10.92,33.85,22.73],
+    'P/L': [6.43,7.46,12.86,9.0,4.16],
+    'P/VPA': [0.89,1.68,1.04,3.04,0.96],
+    'Dividend Yield': [7.50,11.62,6.90,8.16,14.53]
 }
 
-# Score final
-df['Score Final'] = sum(df[col] * peso for col, peso in pesos.items())
-df_ranked = df[['Empresa', 'Score Final']].sort_values(by='Score Final', ascending=False).reset_index(drop=True)
+# Normalização
+def processar_dados(dados):
+    df = pd.DataFrame(dados)
+    
+    maior_melhor = ['Liquidez Corrente', 'Margem Líquida', 'ROE', 'Dividend Yield']
+    menor_melhor = ['Grau de Endividamento', 'P/L', 'P/VPA']
 
+    for col in maior_melhor:
+        df[col + '_norm'] = (df[col] - df[col].min()) / (df[col].max() - df[col].min())
+
+    for col in menor_melhor:
+        df[col + '_norm'] = 1 - (df[col] - df[col].min()) / (df[col].max() - df[col].min())
+
+    # Pesos
+    pesos = {
+        'Liquidez Corrente_norm': 0.10,
+        'Grau de Endividamento_norm': 0.15,
+        'Margem Líquida_norm': 0.15,
+        'ROE_norm': 0.15,
+        'P/L_norm': 0.15,
+        'P/VPA_norm': 0.10,
+        'Dividend Yield_norm': 0.10
+    }
+
+    # Score final
+    df['Score Final'] = sum(df[col] * peso for col, peso in pesos.items())
+    df_ranked = df[['Empresa', 'Score Final']].sort_values(by='Score Final', ascending=False).reset_index(drop=True)
+    return df, df_ranked
 # === INTERFACE STREAMLIT ===
-st.set_page_config(page_title="Ranking Imobiliário", layout="centered")
+st.set_page_config(page_title="Ranking das Empresas", layout="centered")
 
-st.title("📊 Ranking de Empresas do Setor Imobiliário")
+st.title("📊 Ranking de Empresas por Setor ")
+# Seletor de setor
+setor = st.selectbox("Selecione o setor:", ["Imobiliário", "Energia"])
+
+if setor == "Imobiliário":
+    df, df_ranked = processar_dados(dados_imobiliario)
+    dados_base = dados_imobiliario
+else:
+    df, df_ranked = processar_dados(dados_energia)
+    dados_base = dados_energia
 
 aba1, aba2, aba3 = st.tabs(["🏗️ Indicadores", "🏆 Ranking Final", "📈 Gráfico"])
 
 with aba1:
     st.subheader("📌 Indicadores Médios por Empresa (2022-2024)")
-    st.dataframe(df[dados.keys()].set_index('Empresa'), use_container_width=True)
+    st.dataframe(pd.DataFrame(dados_base).set_index('Empresa'), use_container_width=True)
     st.markdown("Indicadores como Liquidez, Endividamento, Margem e ROE foram utilizados com pesos ponderados para construir o ranking final.")
 
 with aba2:
