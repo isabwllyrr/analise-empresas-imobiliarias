@@ -91,6 +91,39 @@ else:
     df, df_ranked = processar_dados(dados_energia)
     dados_base = dados_energia
 
+aba0, aba1, aba2, aba3 = st.tabs(["📘 Introdução", "🏗️ Indicadores", "🏆 Ranking Final", "📈 Gráfico"])
+
+with aba0:
+    st.subheader("🧠 Visão Geral do Setor Imobiliário")
+    st.markdown("""
+    O setor imobiliário é responsável por atividades ligadas à compra, venda, aluguel e construção de imóveis, sendo um dos principais termômetros da economia.
+
+    ### 🔍 Indicadores Utilizados
+
+    Para avaliar o desempenho das empresas, foram escolhidos os seguintes indicadores:
+    - **Liquidez Corrente**: capacidade de pagar dívidas de curto prazo.
+    - **Grau de Endividamento**: proporção da dívida em relação ao patrimônio.
+    - **Composição do Endividamento**: participação do passivo oneroso no total.
+    - **Margem Líquida**: lucratividade após despesas operacionais e impostos.
+    - **ROE** (Rentabilidade do Patrimônio Líquido): eficiência em gerar lucro com o patrimônio.
+    - **P/L** (Preço sobre Lucro): tempo de retorno do investimento.
+    - **P/VPA** (Preço sobre Valor Patrimonial): disposição do investidor.
+    - **Dividend Yield**: retorno ao acionista via dividendos.
+    - **EBITDA**: capacidade operacional de geração de caixa.
+
+    ### ⚖️ Critérios de Normalização e Pesos
+
+    Os indicadores foram normalizados para ficarem entre 0 e 1. Atribuímos pesos com base na relevância para análise do setor:
+    - 0.15 para indicadores fundamentais como **ROE**, **Margem**, **Endividamento** e **P/L**
+    - 0.10 para **Liquidez**, **P/VPA**, **Yield** e **EBITDA**
+    - 0.10 para **Composição do Endividamento**
+
+    ### 🏆 Construção do Ranking
+
+    O ranking foi elaborado com base no **score final**, calculado pela média ponderada dos indicadores normalizados. As empresas foram ordenadas do maior para o menor score, identificando as mais eficientes sob a ótica contábil e de mercado.
+
+    ---
+    """)
 
 aba1, aba2, aba3 = st.tabs(["🏗️ Indicadores", "🏆 Ranking Final", "📈 Gráfico"])
 
