@@ -143,4 +143,4 @@ with aba3:
     st.pyplot(fig)
 
 st.markdown("---")
-st.caption("Projeto de análise desenvolvido com Streamlit | Dados fictícios de exemplo para uso acadêmico")
+st.caption("Projeto de análise desenvolvido com Streamlit | Dados para uso acadêmico")
