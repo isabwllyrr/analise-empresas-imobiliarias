@@ -125,8 +125,6 @@ with aba0:
     ---
     """)
 
-aba1, aba2, aba3 = st.tabs(["🏗️ Indicadores", "🏆 Ranking Final", "📈 Gráfico"])
-
 with aba1:
     st.subheader("📌 Indicadores Médios por Empresa (2022-2024)")
     st.dataframe(pd.DataFrame(dados_base).set_index('Empresa'), use_container_width=True)
