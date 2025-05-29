@@ -194,20 +194,15 @@ else:
     """
 
 # Exibição das abas
-aba0, aba1, aba2, aba3 = st.tabs(["📘 Introdução", "🏗️ Indicadores", "🏆 Ranking Final", "📈 Gráfico"])
+aba0, aba1, aba2, aba3, aba4 = st.tabs(["📘 Introdução", "🏗️ Indicadores", "🏆 Ranking Final", "📈 Gráfico", "📋 Critérios de Avaliação"])
 
 with aba0:
-    if setor == "Imobiliário":
-        st.subheader("🧠 Visão Geral do Setor Imobiliário")
-        st.markdown(texto_setor)
-    else:
-        st.subheader("🧠 Visão Geral do Setor de Energia")
-        st.markdown(texto_setor)
-
+    st.subheader(titulo_setor)
+    st.markdown(texto_setor)
 
 with aba1:
     st.subheader("📌 Indicadores Médios por Empresa (2022-2024)")
-    st.dataframe(dados_base.set_index('Empresa'), use_container_width=True)
+    st.dataframe(pd.DataFrame(dados_base).set_index('Empresa'), use_container_width=True)
 
 with aba2:
     st.subheader("🏆 Ranking Final (Score Normalizado)")
@@ -221,6 +216,46 @@ with aba3:
     ax.set_ylabel("Score Normalizado")
     ax.grid(axis='y', linestyle='--', alpha=0.7)
     st.pyplot(fig)
+
+with aba4:
+    st.subheader("📋 Critérios e Distribuição dos Pesos")
+
+    st.markdown("### 📅 Peso dos Indicadores por Ano")
+    dados_ano = pd.DataFrame({
+        "Ano": ["2024", "2023", "2022"],
+        "Peso": ["45%", "35%", "20%"]
+    })
+    st.dataframe(dados_ano, use_container_width=True, hide_index=True)
+
+    st.markdown("### 🧮 Distribuição por Tipo de Medição")
+    dados_tipo = pd.DataFrame({
+        "Tipo de Medição": ["Rentabilidade", "Dívida", "Valuation"],
+        "Porcentagem": ["38%", "27%", "35%"]
+    })
+    st.dataframe(dados_tipo, use_container_width=True, hide_index=True)
+
+    st.markdown("### ⚖️ Pesos dos Indicadores")
+    dados_indicadores = pd.DataFrame({
+        "Índices": [
+            "Índices Contábeis", "", "", "", "", "", "Total Contábeis",
+            "Índices de Bolsa", "", "", "Bolsa Total"
+        ],
+        "Indicadores": [
+            "ROE", "Margem Líquida", "MARGEM EBITDA", "Composição do Endividamento",
+            "Grau de Endividamento", "Liquidez Corrente", "",
+            "P/L", "P/VPA", "Rendimento de Dividendos", ""
+        ],
+        "Pesos": [
+            "0,12", "0,12", "0,14", "0,11", "0,09", "0,07", "0,65",
+            "0,10", "0,15", "0,10", "0,35"
+        ],
+        "Tipo de Medição": [
+            "Rentabilidade", "Rentabilidade", "Rentabilidade",
+            "Dívida", "Dívida", "Dívida", "",
+            "Avaliação", "Avaliação", "Avaliação", ""
+        ]
+    })
+    st.dataframe(dados_indicadores, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 st.caption("Projeto de análise desenvolvido com Streamlit | Dados para uso acadêmico")
